@@ -27,18 +27,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mapping();
+        mapping();// hàm thực hiện ánh xạ
 
-        // luôn chặn không cho thao tác với seekbar
+        // cài đặt để không thao tác được với seekbar --> tránh gian lận
         sb_player1.setEnabled(false);
         sb_player2.setEnabled(false);
         sb_player3.setEnabled(false);
         ///////////////////////////////
+        // ẩn nút Continue trước khi bắt đầu
+        bt_continue.setVisibility(View.INVISIBLE);
 
         final CountDownTimer countDownTimer = new CountDownTimer(60000,300) {
             @Override
             public void onTick(long l) {
                 int goal = sb_player1.getMax();
+
+                // thuật toán chính của chương trình
                 Random random = new Random();
                 sb_player1.setProgress(sb_player1.getProgress()+random.nextInt(10));
                 sb_player2.setProgress(sb_player2.getProgress()+random.nextInt(10));
@@ -88,20 +92,21 @@ public class MainActivity extends AppCompatActivity {
                 if (isChosen() != 0) {
                     if(Integer.parseInt(tv_point.getText().toString())<=0)
                     {
+                        // nếu điểm âm thì đặt lại như ban đầu
                         Toast.makeText(MainActivity.this, "You lost all of your point\n This is new game", Toast.LENGTH_SHORT).show();
                         tv_point.setText("100");
                     }
                     iv_play.setVisibility(View.INVISIBLE);
                     bt_continue.setVisibility(View.INVISIBLE);
 
-                    // chặn chọn lại, gian lận
+                    // khi bắt đầu chơi thì chặn người dùng thao tác checkbox và seekbar --. tránh việc người dùng chọn lại
                     disable();
                     //
 
                     countDownTimer.start();
 
                 }
-                else
+                else// nếu như chưa chọn con vật nào để đua
                     Toast.makeText(MainActivity.this, "Please choose a animal", Toast.LENGTH_SHORT).show();
             }
         });
@@ -109,19 +114,20 @@ public class MainActivity extends AppCompatActivity {
         bt_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // đặt lại progress của các seekbar
+                // mỗi khi nhấn button Continue --> đặt các con vật về vị trí xuất phát
                 sb_player1.setProgress(0);
                 sb_player2.setProgress(0);
                 sb_player3.setProgress(0);
-
-                //cho phép chọn checkbox
+                // cho phép thao tác với checkbox để chọn con vật
                 enable();
 
+                // hiện button play và ẩn button Continue
                 iv_play.setVisibility(View.VISIBLE);
                 bt_continue.setVisibility(View.INVISIBLE);
             }
         });
 
+        // check nếu chọn checkbox này thì hủy chọn 2 checkbox còn lại
         cb_player1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -169,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
         bt_continue = (Button)findViewById(R.id.Button_continue);
     }
+    // trả về lựa chọn của người chơi
     private int isChosen()
     {
         if(cb_player1.isChecked())
@@ -179,14 +186,15 @@ public class MainActivity extends AppCompatActivity {
             return 3;
         return 0;
     }
-    // cho phép thao tác vào checkbox và seekbar
+    //hàm chặn thao tác
     private void disable()
     {
         cb_player1.setEnabled(false);
         cb_player2.setEnabled(false);
         cb_player3.setEnabled(false);
     }
-    // chặn thao tác vào checkbox và seekbar
+
+    // hàm cho phép thao tác
     private void enable()
     {
         cb_player1.setEnabled(true);
