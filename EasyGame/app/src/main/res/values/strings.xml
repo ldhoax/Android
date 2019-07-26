@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">EasyGame</string>
+    <string name="Question">Câu hỏi</string>
+    <string name="Time">Thời gian</string>
+    <string name="Point">Điểm</string>
+</resources>
